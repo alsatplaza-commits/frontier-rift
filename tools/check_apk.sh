@@ -32,8 +32,13 @@ if grep -R -a -E "shell_open|execute_with_pipe|OS\\.execute" "$WORKDIR/assets"; 
   echo "forbidden process API leaked into APK assets"
   exit 1
 fi
-if ! grep -R -a -F "com.frontierrift.uninstall.RiftUninstallPlugin" "$WORKDIR" >/dev/null; then
-  echo "uninstall plugin class missing from APK"
+# Class names in the binary manifest are UTF-16. Dex stores them with slashes.
+if ! "$AAPT" dump xmltree "$APK" AndroidManifest.xml | grep -F "com.frontierrift.uninstall.RiftUninstallPlugin" >/dev/null; then
+  echo "uninstall plugin class missing from the manifest"
+  exit 1
+fi
+if ! "$AAPT" dump xmltree "$APK" AndroidManifest.xml | grep -F "org.godotengine.plugin.v2.RiftUninstall" >/dev/null; then
+  echo "uninstall plugin metadata missing from the manifest"
   exit 1
 fi
 if ! grep -R -a -F "openOwnAppSettings" "$WORKDIR" >/dev/null; then

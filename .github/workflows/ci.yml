@@ -55,10 +55,12 @@ jobs:
         run: bash tools/install_godot.sh
 
       - name: Import project
-        run: "$HOME/godot/Godot_v4.7.2-stable_linux.x86_64" --headless --editor --quit --path .
+        run: |
+          "$HOME/godot/Godot_v4.7.2-stable_linux.x86_64" --headless --editor --quit --path .
 
       - name: Headless tests
-        run: "$HOME/godot/Godot_v4.7.2-stable_linux.x86_64" --headless --path . --script res://tests/test_runner.gd
+        run: |
+          "$HOME/godot/Godot_v4.7.2-stable_linux.x86_64" --headless --path . --script res://tests/test_runner.gd
 
       - name: Export Windows
         run: |
@@ -126,7 +128,7 @@ jobs:
         run: |
           set -euo pipefail
           yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager --install "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+          sdkmanager --install "platforms;android-35" "platforms;android-36" "build-tools;35.0.0" "build-tools;36.0.0" "platform-tools"
 
       - name: Build uninstall plugin
         run: |
@@ -149,6 +151,9 @@ jobs:
       - name: Install Godot 4.7.2
         run: bash tools/install_godot.sh
 
+      - name: Install the Android build template
+        run: bash tools/install_android_template.sh
+
       - name: Point Godot at the CI keystore and SDK
         run: |
           set -euo pipefail
@@ -165,7 +170,8 @@ jobs:
           echo "GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD=android" >> "$GITHUB_ENV"
 
       - name: Import project
-        run: "$HOME/godot/Godot_v4.7.2-stable_linux.x86_64" --headless --editor --quit --path .
+        run: |
+          "$HOME/godot/Godot_v4.7.2-stable_linux.x86_64" --headless --editor --quit --path .
 
       - name: Export debug APK
         run: |

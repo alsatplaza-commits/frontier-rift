@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.Settings;
 
-import androidx.annotation.NonNull;
-
 import org.godotengine.godot.Godot;
 import org.godotengine.godot.plugin.GodotPlugin;
 import org.godotengine.godot.plugin.UsedByGodot;
@@ -20,7 +18,6 @@ public class RiftUninstallPlugin extends GodotPlugin {
         super(godot);
     }
 
-    @NonNull
     @Override
     public String getPluginName() {
         return "RiftUninstall";
