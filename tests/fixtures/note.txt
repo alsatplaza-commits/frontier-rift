@@ -1,0 +1,1 @@
+Rift Engine deneme paketi. Çekirdek oyun bu paket olmadan da çalışır.

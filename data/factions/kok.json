@@ -1,0 +1,21 @@
+{
+  "id": "kok",
+  "name": "Kök",
+  "color": "#5B8C5A",
+  "archetype": "defensive_guerrilla",
+  "summary": "Savunma ve orman pususu. Ağır zırhı yıpratır.",
+  "counters": ["demir_pence"],
+  "countered_by": ["ruzgar"],
+  "counter_bonus": 0.45,
+  "buildings": {
+    "command": {"name": "Kök Yuva", "hp": 1400, "cost": 0, "time": 0, "size": 3, "armor": 6, "attack": 0, "range": 0, "cooldown": 1.0},
+    "refinery": {"name": "Değirmen", "hp": 700, "cost": 120, "time": 7, "size": 2, "armor": 4, "attack": 0, "range": 0, "cooldown": 1.0},
+    "barracks": {"name": "Sığınak", "hp": 820, "cost": 160, "time": 8, "size": 2, "armor": 5, "attack": 0, "range": 0, "cooldown": 1.0, "produces": ["harvester", "infantry", "heavy"]},
+    "turret": {"name": "Diken", "hp": 560, "cost": 90, "time": 5, "size": 1, "armor": 5, "attack": 26, "range": 155, "cooldown": 0.8, "bonus_vs_air": 0.25}
+  },
+  "units": {
+    "harvester": {"name": "Toplayıcı", "hp": 200, "cost": 60, "time": 5, "speed": 8.0, "cargo": 50, "armor": 3, "radius": 10, "attack": 0, "range": 0, "cooldown": 1.0},
+    "infantry": {"name": "Pusu", "hp": 160, "cost": 50, "time": 4, "speed": 9.5, "armor": 3, "radius": 8, "attack": 16, "range": 24, "cooldown": 0.6, "forest_bonus": true},
+    "heavy": {"name": "Korucu", "hp": 340, "cost": 130, "time": 8, "speed": 7.5, "armor": 5, "radius": 11, "attack": 28, "range": 40, "cooldown": 0.95, "forest_bonus": true}
+  }
+}

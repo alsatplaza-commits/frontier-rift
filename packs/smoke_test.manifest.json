@@ -1,0 +1,11 @@
+{
+  "key_id": "TEST",
+  "alg": "ed25519",
+  "manifest": {
+    "filename": "smoke_test.pck",
+    "pack_id": "rift_smoke",
+    "sha256": "ec60e6f944e3cf10ae92519843b0d84a81e3820d4e75d6f6bc20173c4b20ef9b",
+    "version": 1
+  },
+  "signature": "JSgnP52xIxMOIEy44Bf2UwaWI7yZO6+t+hgtYYWruwfiOuN3wJa35ufZD6sGy7/cTNtEM2k7xhgwLAI02Wu7Dw=="
+}

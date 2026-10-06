@@ -1,0 +1,21 @@
+{
+  "id": "demir_pence",
+  "name": "Demir Pençe",
+  "color": "#C45C26",
+  "archetype": "armored_heavy",
+  "summary": "Ağır zırh. Yavaş ama dayanıklı.",
+  "counters": ["ruzgar"],
+  "countered_by": ["kok"],
+  "counter_bonus": 0.45,
+  "buildings": {
+    "command": {"name": "Komuta", "hp": 1600, "cost": 0, "time": 0, "size": 3, "armor": 10, "attack": 0, "range": 0, "cooldown": 1.0},
+    "refinery": {"name": "İzabe", "hp": 800, "cost": 150, "time": 8, "size": 2, "armor": 6, "attack": 0, "range": 0, "cooldown": 1.0},
+    "barracks": {"name": "Kışla", "hp": 900, "cost": 200, "time": 10, "size": 2, "armor": 6, "attack": 0, "range": 0, "cooldown": 1.0, "produces": ["harvester", "infantry", "heavy"]},
+    "turret": {"name": "Kule", "hp": 650, "cost": 140, "time": 7, "size": 1, "armor": 8, "attack": 34, "range": 170, "cooldown": 0.9, "bonus_vs_air": 0.85}
+  },
+  "units": {
+    "harvester": {"name": "Toplayıcı", "hp": 280, "cost": 80, "time": 6, "speed": 7.0, "cargo": 60, "armor": 6, "radius": 10, "attack": 0, "range": 0, "cooldown": 1.0},
+    "infantry": {"name": "Piyade", "hp": 240, "cost": 70, "time": 5, "speed": 8.0, "armor": 8, "radius": 8, "attack": 18, "range": 22, "cooldown": 0.7},
+    "heavy": {"name": "Zırhlı", "hp": 620, "cost": 180, "time": 10, "speed": 5.2, "armor": 16, "radius": 12, "attack": 36, "range": 48, "cooldown": 1.2}
+  }
+}

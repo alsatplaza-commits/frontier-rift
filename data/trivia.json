@@ -1,0 +1,14 @@
+{
+  "sputnik": {
+    "title": "Sputnik 1",
+    "body": "Sputnik 1 (1957) dünyayı yaklaşık 96 dakikada bir turladı."
+  },
+  "moon": {
+    "title": "Ay",
+    "body": "Ay, Dünya'dan ortalama 384 bin kilometre uzaktadır."
+  },
+  "photo": {
+    "title": "İlk fotoğraf",
+    "body": "İlk kalıcı fotoğraf 1826 civarında çekildi ve saatlerce ışık istedi."
+  }
+}
