@@ -9,6 +9,7 @@ var click_player: AudioStreamPlayer
 
 
 func _ready() -> void:
+	DisplayServer.window_set_title("Frontier Rift")
 	factions = FactionDB.load_all()
 	levels = ContentDB.load_levels()
 	trivia = ContentDB.load_trivia()

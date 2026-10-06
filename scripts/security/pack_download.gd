@@ -85,8 +85,10 @@ func _take_pack(body: PackedByteArray) -> void:
 		_fail("Paket yüklenemedi.")
 		return
 	var note := ""
-	if FileAccess.file_exists("res://packs/smoke/note.txt"):
-		note = FileAccess.get_file_as_string("res://packs/smoke/note.txt").strip_edges()
+	if FileAccess.file_exists("res://packs/smoke/note.json"):
+		var parsed = JSON.parse_string(FileAccess.get_file_as_string("res://packs/smoke/note.json"))
+		if typeof(parsed) == TYPE_DICTIONARY:
+			note = str(parsed.get("note", "")).strip_edges()
 	finished.emit(true, note if note != "" else "Test paketi yüklendi.")
 	queue_free()
 

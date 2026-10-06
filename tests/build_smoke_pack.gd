@@ -9,7 +9,7 @@ func _init() -> void:
 		print("pck_start ", err)
 		quit(1)
 		return
-	err = packer.add_file("res://packs/smoke/note.txt", ProjectSettings.globalize_path("res://tests/fixtures/note.txt"))
+	err = packer.add_file("res://packs/smoke/note.json", ProjectSettings.globalize_path("res://tests/fixtures/note.json"))
 	if err != OK:
 		print("add ", err)
 		quit(1)

@@ -23,3 +23,5 @@ Kaldırmak için oyunda **Ayarlar > Oyunu kaldır** düğmesine bas ve onayla. A
 ## Test paketi
 
 Ayarlar’daki **Test paketini indir** isteğe bağlıdır. İndirme olmazsa oyun yine oynanır.
+
+Lisans metinleri **Ayarlar > Lisanslar** altındadır.

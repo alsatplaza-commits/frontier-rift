@@ -4,6 +4,7 @@ var _status: Label
 var _downloader: PackDownload
 var _confirm: ConfirmationDialog
 var _alert: AcceptDialog
+var _licenses: Window
 
 
 func _ready() -> void:
@@ -47,6 +48,9 @@ func _ready() -> void:
 	var uninstall := UiKit.button("Oyunu kaldır", 420)
 	uninstall.pressed.connect(_on_uninstall)
 	box.add_child(uninstall)
+	var licenses := UiKit.button("Lisanslar", 420)
+	licenses.pressed.connect(_on_licenses)
+	box.add_child(licenses)
 	var back := UiKit.button("Geri")
 	back.pressed.connect(func() -> void:
 		get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
@@ -63,6 +67,20 @@ func _ready() -> void:
 	_alert.title = "Kaldırma"
 	_alert.ok_button_text = "Tamam"
 	add_child(_alert)
+	_licenses = Window.new()
+	_licenses.title = "Lisanslar"
+	_licenses.size = Vector2i(840, 600)
+	_licenses.initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_PRIMARY_SCREEN
+	_licenses.close_requested.connect(func() -> void:
+		_licenses.hide()
+	)
+	var license_text := TextEdit.new()
+	license_text.name = "LicenseText"
+	license_text.editable = false
+	license_text.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	license_text.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_licenses.add_child(license_text)
+	add_child(_licenses)
 
 
 func _set_quality(key: String) -> void:
@@ -84,6 +102,15 @@ func _on_pack() -> void:
 		_downloader = null
 	)
 	_downloader.start()
+
+
+func _on_licenses() -> void:
+	var view := _licenses.get_node("LicenseText") as TextEdit
+	if FileAccess.file_exists("res://THIRD_PARTY_LICENSES.txt"):
+		view.text = FileAccess.get_file_as_string("res://THIRD_PARTY_LICENSES.txt")
+	else:
+		view.text = "Lisans metni bulunamadı."
+	_licenses.popup_centered()
 
 
 func _on_uninstall() -> void:

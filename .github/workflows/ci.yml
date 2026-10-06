@@ -51,6 +51,14 @@ jobs:
             ~/.local/share/godot/export_templates/4.7.2.stable
           key: godot-4.7.2-stable-linux
 
+      - name: Install installer tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y nsis wine64 xvfb
+          curl -fsSL -o "$RUNNER_TEMP/rcedit-x64.exe" https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe
+          echo "RCEDIT=$RUNNER_TEMP/rcedit-x64.exe" >> "$GITHUB_ENV"
+
       - name: Install Godot 4.7.2
         run: bash tools/install_godot.sh
 
@@ -77,14 +85,16 @@ jobs:
             exit 1
           fi
 
+      - name: Apply Windows version resources
+        run: bash tools/apply_windows_version.sh build/windows/FrontierRift.exe
+
       - name: Build per-user installer
+        run: bash tools/build_installer.sh
+
+      - name: Check version resources
         run: |
-          set -euo pipefail
-          sudo apt-get update
-          sudo apt-get install -y nsis
-          mkdir -p build/installer
-          makensis installer/frontier_rift.nsi
-          test -f build/installer/FrontierRift-Setup.exe
+          python3 -m pip install pefile
+          python3 tools/check_version_info.py build/windows/FrontierRift.exe build/installer/FrontierRift-Setup.exe
 
       - name: Export Linux
         run: |

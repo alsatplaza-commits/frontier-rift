@@ -1,6 +1,6 @@
 # Frontier Rift
 
-Sprint 1 of a desktop and Android RTS. The game runs on **Godot 4.7.2** and is branded **Rift Engine** in the client. This repository does not contain a custom engine.
+Sprint 1 of a desktop and Android RTS on **Rift Engine**. The pinned toolchain is in [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 The match loop is offline. Windows and Android both start, save, and finish a match with no network. The only request is the optional **Test paketini indir** button in Settings, and it talks only to `raw.githubusercontent.com`. There is no telemetry and no startup online check.
 
@@ -27,8 +27,8 @@ Player steps are in [OYNA.md](OYNA.md). Download the installer or APK from the G
 - APK permissions are `android.permission.INTERNET` only. `tools/check_android_preset.py` checks the preset; `tools/check_apk.sh` checks the built manifest.
 - Android backup is off: `android:allowBackup="false"`, and full-backup plus data-extraction rules exclude every domain. CI fails if `allowBackup` is missing or true. Saves stay in app storage.
 - Saves and downloaded packs stay in `user://`.
-- Packs need an Ed25519 signature plus a SHA-256 match, and are rejected if they contain scripts or native libraries. Verification runs on device and does not need the network once the file is local.
-- No keystore is committed. CI generates a debug keystore with `keytool` and passes it through `GODOT_ANDROID_KEYSTORE_DEBUG_*`.
+- Packs need an Ed25519 signature plus a SHA-256 match. A pack may contain only `.ctex`, `.png`, `.webp`, `.oggvorbisstr`, `.ogg`, `.import`, `.json`, and the signed manifest. Verification runs on device and does not need the network once the file is local.
+- No keystore is committed. CI generates a debug keystore. The pinned toolchain is in [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 ## Pack signing
 
@@ -38,4 +38,8 @@ To rotate it, generate an Ed25519 key locally, store the raw 32-byte hex or a PE
 
 ## CI
 
-GitHub Actions runs the security grep, headless GDScript tests, a Windows export plus NSIS installer, a Linux export, then an Android debug APK. The Windows job finishes before the APK job starts.
+GitHub Actions runs the security grep, headless tests, a Windows export plus per-user installer, a Linux export, then an Android debug APK. The Windows job finishes before the APK job starts.
+
+## Licenses
+
+Engine and third-party notices are in [THIRD_PARTY_LICENSES.txt](THIRD_PARTY_LICENSES.txt). In the game they are under Ayarlar → Lisanslar.

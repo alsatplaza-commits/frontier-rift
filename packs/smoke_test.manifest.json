@@ -4,8 +4,8 @@
   "manifest": {
     "filename": "smoke_test.pck",
     "pack_id": "rift_smoke",
-    "sha256": "ec60e6f944e3cf10ae92519843b0d84a81e3820d4e75d6f6bc20173c4b20ef9b",
+    "sha256": "dca52f50a784820e659e414c0e3113060d67e74d51095976f2119fe3ed2c90c0",
     "version": 1
   },
-  "signature": "JSgnP52xIxMOIEy44Bf2UwaWI7yZO6+t+hgtYYWruwfiOuN3wJa35ufZD6sGy7/cTNtEM2k7xhgwLAI02Wu7Dw=="
+  "signature": "7Ghk2LUs2Ewg1SJn8M5HjhCUgTkkKEg1qIHqtOcw/pkvkVvYABWv1f3xl/wvrv3DnhWFVet6H78acE6MDE5gBQ=="
 }

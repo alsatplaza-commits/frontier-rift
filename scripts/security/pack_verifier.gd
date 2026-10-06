@@ -1,8 +1,9 @@
 class_name PackVerifier
 extends RefCounted
 
-const FORBIDDEN_EXT := [
-	".gd", ".gdc", ".cs", ".dll", ".so", ".dylib", ".gdextension", ".gdext",
+# Data files only. The signed manifest is JSON, so it is included here.
+const ALLOWED_EXT := [
+	".ctex", ".png", ".webp", ".oggvorbisstr", ".ogg", ".import", ".json",
 ]
 
 
@@ -77,19 +78,22 @@ static func _reject_entry(entry: Dictionary) -> String:
 	var path := str(entry.path).replace("\\", "/").to_lower()
 	if path.contains("..") or path.begins_with("/") or path.contains(":/"):
 		return "Paket yolu reddedildi."
-	for ext in FORBIDDEN_EXT:
-		if path.ends_with(ext):
-			return "Paket kod veya yerel kütüphane içeriyor."
 	var flags := int(entry.flags)
 	if (flags & 1) != 0 or (flags & 4) != 0:
 		return "Şifreli paket reddedildi."
-	if path.ends_with(".tscn") or path.ends_with(".tres") or path.ends_with(".res"):
-		var text := (entry.bytes as PackedByteArray).get_string_from_utf8().to_lower()
-		if text.contains("script") or text.contains(".gd") or text.contains(".gdc") or text.contains(".cs") or text.contains("gdscript") or text.contains("csharpscript"):
-			return "Paket betik içeren sahne içeriyor."
-		if (entry.bytes as PackedByteArray).size() > 0 and int((entry.bytes as PackedByteArray)[0]) == 0:
-			return "İncelenemeyen kaynak reddedildi."
+	if not _extension_allowed(path):
+		return "Paket dosya türü reddedildi."
 	return ""
+
+
+static func _extension_allowed(path: String) -> bool:
+	var base := path.get_file()
+	if base == "smoke_test.manifest.json" or base.ends_with(".manifest.json"):
+		return true
+	for ext in ALLOWED_EXT:
+		if path.ends_with(ext):
+			return true
+	return false
 
 
 static func _parse_pck(data: PackedByteArray) -> Dictionary:

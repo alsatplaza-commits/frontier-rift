@@ -24,4 +24,6 @@ if git ls-files | grep -Ei '(^|/)[^/]*\.(keystore|jks)$'; then
   echo "keystore must not be committed"
   exit 1
 fi
+bash tools/check_nsi.sh
+bash tools/check_brand.sh
 echo "security grep ok"

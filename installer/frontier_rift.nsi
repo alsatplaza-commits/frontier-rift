@@ -1,17 +1,32 @@
 ; Per-user Frontier Rift installer. No admin. Windowed exe only.
-; The uninstaller is always named unins000.exe and its SHA-256 is recorded beside it.
+; CI builds this twice. The first pass writes the uninstaller, CI hashes it,
+; and the second pass ships that hash as uninstall.sha256. Nothing here
+; starts a shell while the installer is running.
 
 Unicode True
 RequestExecutionLevel user
 
 !include "MUI2.nsh"
 !include "FileFunc.nsh"
-!include "LogicLib.nsh"
 
 Name "Frontier Rift"
 OutFile "..\build\installer\FrontierRift-Setup.exe"
 InstallDir "$LOCALAPPDATA\Frontier Rift"
 InstallDirRegKey HKCU "Software\Frontier Rift" "InstallDir"
+
+!define PRODUCT_VERSION "0.1.0.0"
+VIProductVersion "${PRODUCT_VERSION}"
+VIFileVersion "${PRODUCT_VERSION}"
+VIAddVersionKey "ProductName" "Frontier Rift"
+VIAddVersionKey "FileDescription" "Frontier Rift"
+VIAddVersionKey "CompanyName" "alsatplaza-commits"
+VIAddVersionKey "LegalCopyright" "(c) 2026 Frontier Rift"
+VIAddVersionKey "FileVersion" "${PRODUCT_VERSION}"
+VIAddVersionKey "ProductVersion" "${PRODUCT_VERSION}"
+VIAddVersionKey "InternalName" "FrontierRift"
+VIAddVersionKey "OriginalFilename" "FrontierRift-Setup.exe"
+VIAddVersionKey "LegalTrademarks" "Frontier Rift"
+VIAddVersionKey "Comments" "Frontier Rift"
 
 !define MUI_ABORTWARNING
 !insertmacro MUI_PAGE_WELCOME
@@ -22,22 +37,18 @@ InstallDirRegKey HKCU "Software\Frontier Rift" "InstallDir"
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_LANGUAGE "Turkish"
 
+; Compile-time only. makensis runs this with the script directory as cwd.
+; %1 is the uninstaller NSIS just produced.
+!uninstfinalize 'mkdir -p "../build/installer" && cp "%1" "../build/installer/unins000-prebuilt.exe"'
+
 Section "Kurulum"
   SetOutPath "$INSTDIR"
   ; Ship only the windowed executable. Never add a *.console.exe.
   File "..\build\windows\FrontierRift.exe"
   WriteUninstaller "$INSTDIR\unins000.exe"
-
-  FileOpen $9 "$INSTDIR\_hash.ps1" w
-  FileWrite $9 "$$h = (Get-FileHash -LiteralPath '$INSTDIR\unins000.exe' -Algorithm SHA256).Hash.ToLower()$\r$\n"
-  FileWrite $9 "[System.IO.File]::WriteAllText('$INSTDIR\uninstall.sha256', $$h)$\r$\n"
-  FileClose $9
-  nsExec::ExecToLog 'powershell.exe -NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File "$INSTDIR\_hash.ps1"'
-  Pop $0
-  Delete "$INSTDIR\_hash.ps1"
-  ${If} $0 != 0
-    Abort "Kaldırma özeti yazılamadı."
-  ${EndIf}
+  !ifdef EMBED_HASH
+    File "/oname=uninstall.sha256" "..\build\installer\uninstall.sha256"
+  !endif
 
   CreateShortcut "$DESKTOP\Frontier Rift.lnk" "$INSTDIR\FrontierRift.exe" "" "$INSTDIR\FrontierRift.exe" 0
   WriteRegStr HKCU "Software\Frontier Rift" "InstallDir" "$INSTDIR"

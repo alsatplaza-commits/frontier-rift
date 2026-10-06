@@ -47,7 +47,7 @@ static func run() -> String:
 	if bad_hash.ok or not str(bad_hash.reason).contains("özeti"):
 		return "bad hash accepted: " + str(bad_hash.reason)
 	var evil := "user://packs/evil.pck"
-	var err := _write_pck(evil, "res://evil.gd", "extends Node\n".to_utf8_buffer())
+	var err := _write_entries(evil, [["res://evil.gd", "extends Node\n".to_utf8_buffer()]])
 	if err != "":
 		return err
 	var scan := PackVerifier.scan_pck(evil)
@@ -55,29 +55,67 @@ static func run() -> String:
 		return "script pack accepted"
 	var scene := "user://packs/scene.pck"
 	var tscn := "[gd_scene]\n[ext_resource type=\"Script\" path=\"res://evil.gd\" id=\"1\"]\n".to_utf8_buffer()
-	err = _write_pck(scene, "res://bad.tscn", tscn)
+	err = _write_entries(scene, [["res://bad.tscn", tscn]])
 	if err != "":
 		return err
 	var scan_scene := PackVerifier.scan_pck(scene)
 	if scan_scene.ok:
 		return "script scene pack accepted"
-	if FileAccess.file_exists("res://packs/smoke/note.txt"):
+	var tres := "user://packs/tres.pck"
+	err = _write_entries(tres, [["res://bad.tres", "[gd_resource]\n".to_utf8_buffer()]])
+	if err != "":
+		return err
+	if PackVerifier.scan_pck(tres).ok:
+		return "tres pack accepted"
+	var scn := "user://packs/scn.pck"
+	err = _write_entries(scn, [["res://bad.scn", PackedByteArray([1, 2, 3, 4])]])
+	if err != "":
+		return err
+	if PackVerifier.scan_pck(scn).ok:
+		return "scn pack accepted"
+	var wav := "user://packs/wav.pck"
+	err = _write_entries(wav, [["res://bad.wav", PackedByteArray([82, 73, 70, 70])]])
+	if err != "":
+		return err
+	if PackVerifier.scan_pck(wav).ok:
+		return "wav pack accepted"
+	var allowed := "user://packs/allowed.pck"
+	err = _write_entries(allowed, [
+		["res://ok.json", "{\"ok\":true}".to_utf8_buffer()],
+		["res://ok.png", PackedByteArray([137, 80, 78, 71, 13, 10, 26, 10])],
+		["res://ok.webp", PackedByteArray([82, 73, 70, 70])],
+		["res://ok.ogg", PackedByteArray([79, 103, 103, 83])],
+		["res://ok.oggvorbisstr", PackedByteArray([1, 2, 3])],
+		["res://ok.import", "[remap]\n".to_utf8_buffer()],
+		["res://ok.ctex", PackedByteArray([1])],
+		["res://smoke_test.manifest.json", "{}".to_utf8_buffer()],
+	])
+	if err != "":
+		return err
+	var scan_ok := PackVerifier.scan_pck(allowed)
+	if not scan_ok.ok:
+		return "allow-list pack rejected: " + str(scan_ok.reason)
+	if FileAccess.file_exists("res://packs/smoke/note.json"):
 		return "note leaked before load"
 	if not ProjectSettings.load_resource_pack(pack_path, false):
 		return "load_resource_pack failed"
-	if not FileAccess.file_exists("res://packs/smoke/note.txt"):
+	if not FileAccess.file_exists("res://packs/smoke/note.json"):
 		return "note missing after load"
+	var note := FileAccess.get_file_as_string("res://packs/smoke/note.json")
+	if not note.contains("Rift Engine deneme paketi"):
+		return "note text mismatch"
 	return ""
 
 
-static func _write_pck(path: String, target: String, data: PackedByteArray) -> String:
+static func _write_entries(path: String, entries: Array) -> String:
 	var packer := PCKPacker.new()
 	var err := packer.pck_start(ProjectSettings.globalize_path(path))
 	if err != OK:
 		return "pck_start %s" % err
-	err = packer.add_file_from_buffer(target, data)
-	if err != OK:
-		return "add_file %s" % err
+	for item in entries:
+		err = packer.add_file_from_buffer(str(item[0]), item[1])
+		if err != OK:
+			return "add_file %s" % err
 	err = packer.flush()
 	if err != OK:
 		return "flush %s" % err
