@@ -31,7 +31,13 @@ func setup(level_def: Dictionary, faction_db: Dictionary, player_faction_id: Str
 	entities.clear()
 	crystals.clear()
 	_queue.clear()
-	var enemy_id := str(level.get("enemy_faction", "kok"))
+	var enemy_id := str(level.get("enemy_faction", ""))
+	if not faction_db.has(enemy_id):
+		enemy_id = ""
+		for key in faction_db.keys():
+			if str(key) != player_faction_id:
+				enemy_id = str(key)
+				break
 	factions[0] = faction_db[player_faction_id]
 	factions[1] = faction_db[enemy_id]
 	resources[0] = int(level.get("starting_resources", 400))

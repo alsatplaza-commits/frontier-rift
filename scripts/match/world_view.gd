@@ -1,3 +1,4 @@
+class_name WorldView
 extends Node2D
 
 const PPM := 4.0

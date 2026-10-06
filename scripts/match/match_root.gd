@@ -5,7 +5,7 @@ const PAN := 900.0
 const PPM := 4.0
 
 var sim := SimWorld.new()
-var view: Node2D
+var view: WorldView
 var selection: Array = []
 var mode := ""
 var build_type := ""
@@ -36,7 +36,7 @@ var _box_ui: Control
 
 
 func _ready() -> void:
-	view = preload("res://scripts/match/world_view.gd").new()
+	view = WorldView.new()
 	add_child(view)
 	var match_data = AppState.profile.get("match")
 	if typeof(match_data) == TYPE_DICTIONARY and match_data.get("sim") != null:

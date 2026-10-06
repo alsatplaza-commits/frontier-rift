@@ -9,7 +9,7 @@ RequestExecutionLevel user
 !include "LogicLib.nsh"
 
 Name "Frontier Rift"
-OutFile "build/installer/FrontierRift-Setup.exe"
+OutFile "..\build\installer\FrontierRift-Setup.exe"
 InstallDir "$LOCALAPPDATA\Frontier Rift"
 InstallDirRegKey HKCU "Software\Frontier Rift" "InstallDir"
 
@@ -25,7 +25,7 @@ InstallDirRegKey HKCU "Software\Frontier Rift" "InstallDir"
 Section "Kurulum"
   SetOutPath "$INSTDIR"
   ; Ship only the windowed executable. Never add a *.console.exe.
-  File "build/windows/FrontierRift.exe"
+  File "..\build\windows\FrontierRift.exe"
   WriteUninstaller "$INSTDIR\unins000.exe"
 
   FileOpen $9 "$INSTDIR\_hash.ps1" w
