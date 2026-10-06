@@ -1,0 +1,21 @@
+{
+  "id": "ruzgar",
+  "name": "Rüzgar",
+  "color": "#4AA3F0",
+  "archetype": "air_fast",
+  "summary": "Hızlı hava birlikleri. Zırha karşı zayıf.",
+  "counters": ["kok"],
+  "countered_by": ["demir_pence"],
+  "counter_bonus": 0.45,
+  "buildings": {
+    "command": {"name": "Yuva", "hp": 1100, "cost": 0, "time": 0, "size": 3, "armor": 3, "attack": 0, "range": 0, "cooldown": 1.0},
+    "refinery": {"name": "Akış", "hp": 560, "cost": 130, "time": 6, "size": 2, "armor": 2, "attack": 0, "range": 0, "cooldown": 1.0},
+    "barracks": {"name": "Hangar", "hp": 640, "cost": 180, "time": 8, "size": 2, "armor": 2, "attack": 0, "range": 0, "cooldown": 1.0, "produces": ["harvester", "infantry", "heavy"]},
+    "turret": {"name": "Fırtına", "hp": 420, "cost": 110, "time": 5, "size": 1, "armor": 2, "attack": 22, "range": 150, "cooldown": 0.55, "bonus_vs_air": 0.1}
+  },
+  "units": {
+    "harvester": {"name": "Uçucu", "hp": 140, "cost": 70, "time": 4, "speed": 13.0, "cargo": 40, "armor": 1, "radius": 9, "attack": 0, "range": 0, "cooldown": 1.0, "air": true},
+    "infantry": {"name": "Avcı", "hp": 110, "cost": 55, "time": 3, "speed": 15.0, "armor": 1, "radius": 8, "attack": 15, "range": 28, "cooldown": 0.45, "air": true},
+    "heavy": {"name": "Okçu", "hp": 220, "cost": 140, "time": 7, "speed": 12.5, "armor": 2, "radius": 10, "attack": 26, "range": 56, "cooldown": 0.7, "air": true}
+  }
+}

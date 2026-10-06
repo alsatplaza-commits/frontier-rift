@@ -1,0 +1,43 @@
+; Engine configuration file.
+; Godot 4.7 — branded in-game as "Rift Engine". This is the official engine, not a custom one.
+
+config_version=5
+
+[application]
+
+config/name="Frontier Rift"
+config/description="Frontier Rift — Rift Engine"
+config/version="0.1.0"
+run/main_scene="res://scenes/main_menu.tscn"
+config/features=PackedStringArray("4.7", "Mobile")
+config/icon="res://icon.png"
+boot_splash/bg_color=Color(0.07, 0.08, 0.1, 1)
+boot_splash/image="res://boot_splash.png"
+boot_splash/fullsize=true
+boot_splash/use_filter=true
+boot_splash/show_image=true
+
+[autoload]
+
+AppState="*res://scripts/app/app_state.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/rift_uninstall/plugin.cfg")
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=4
+window/subwindows/embed_subwindows=true
+
+[rendering]
+
+renderer/rendering_method="mobile"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+rendering_device/fallback_to_opengl3=true
+2d/snap/snap_2d_transforms_to_pixel=true

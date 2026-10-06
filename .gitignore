@@ -1,0 +1,15 @@
+.godot/
+build/
+*.keystore
+*.jks
+*.uid
+android/plugin/.gradle/
+android/plugin/build/
+android/plugin/local.properties
+android/build/
+android/.build_version
+android/plugin/.cxx/
+addons/rift_uninstall/bin/
+.DS_Store
+*.tmp
+export_credentials.cfg

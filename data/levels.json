@@ -1,0 +1,58 @@
+{
+  "levels": [
+    {
+      "id": 1,
+      "name": "İlk Kamp",
+      "seed": 11011,
+      "enemy_faction": "kok",
+      "player_tile": [12, 46],
+      "enemy_tile": [30, 30],
+      "starting_resources": 520,
+      "enemy_resources": 80,
+      "ai_attack_every": 50,
+      "ai_max_combat": 2,
+      "enemy_units": ["infantry"],
+      "enemy_buildings": ["command"],
+      "xp_reward": 40,
+      "objective": "Düşman komutasını yok et.",
+      "reward": "40 deneyim",
+      "trivia_id": "sputnik"
+    },
+    {
+      "id": 2,
+      "name": "Açık Sırt",
+      "seed": 22022,
+      "enemy_faction": "ruzgar",
+      "player_tile": [14, 44],
+      "enemy_tile": [40, 22],
+      "starting_resources": 420,
+      "enemy_resources": 260,
+      "ai_attack_every": 32,
+      "ai_max_combat": 4,
+      "enemy_units": ["infantry", "infantry"],
+      "enemy_buildings": ["command", "barracks"],
+      "xp_reward": 80,
+      "objective": "Hızlı düşmanı durdur ve yuvasını yık.",
+      "reward": "80 deneyim",
+      "trivia_id": "moon"
+    },
+    {
+      "id": 3,
+      "name": "Demir Hat",
+      "seed": 33033,
+      "enemy_faction": "demir_pence",
+      "player_tile": [16, 42],
+      "enemy_tile": [46, 18],
+      "starting_resources": 480,
+      "enemy_resources": 420,
+      "ai_attack_every": 24,
+      "ai_max_combat": 6,
+      "enemy_units": ["infantry", "heavy"],
+      "enemy_buildings": ["command", "barracks", "turret"],
+      "xp_reward": 120,
+      "objective": "Ağır hattı kır ve komutayı düşür.",
+      "reward": "120 deneyim",
+      "trivia_id": "photo"
+    }
+  ]
+}
