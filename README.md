@@ -25,6 +25,7 @@ Player steps are in [OYNA.md](OYNA.md). Download the installer or APK from the G
 - The Android export excludes `scripts/platform/windows`. CI scans APK assets and fails if that Windows path is present.
 - Android uninstall is a no-argument plugin method. The package name is read from the app context. The intent is `ACTION_APPLICATION_DETAILS_SETTINGS` for that package, so the manifest does not request `REQUEST_DELETE_PACKAGES`.
 - APK permissions are `android.permission.INTERNET` only. `tools/check_android_preset.py` checks the preset; `tools/check_apk.sh` checks the built manifest.
+- Android backup is off: `android:allowBackup="false"`, and full-backup plus data-extraction rules exclude every domain. CI fails if `allowBackup` is missing or true. Saves stay in app storage.
 - Saves and downloaded packs stay in `user://`.
 - Packs need an Ed25519 signature plus a SHA-256 match, and are rejected if they contain scripts or native libraries. Verification runs on device and does not need the network once the file is local.
 - No keystore is committed. CI generates a debug keystore with `keytool` and passes it through `GODOT_ANDROID_KEYSTORE_DEBUG_*`.

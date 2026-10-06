@@ -62,6 +62,8 @@ if value("gradle_build/use_gradle_build") not in ("true", "True"):
     errors.append("gradle build required for the uninstall plugin")
 if "android_mobile" not in value("custom_features"):
     errors.append("android_mobile feature tag missing")
+if value("user_data_backup/allow") not in ("false", "False"):
+    errors.append("user_data_backup/allow must be false")
 if errors:
     print("\n".join(errors))
     sys.exit(1)

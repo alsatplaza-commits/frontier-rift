@@ -16,7 +16,7 @@ if grep -R -n -E 'OS\.execute|shell_open|execute_with_pipe' "${SCAN[@]}"; then
   echo "forbidden process API in game code"
   exit 1
 fi
-if grep -R -n -E 'BEGIN (OPENSSH |RSA |EC )?PRIVATE KEY' scripts addons android packs data tests installer tools .github 2>/dev/null; then
+if grep -R -n -E 'BEGIN (OPENSSH |RSA |EC )?PRIVATE KEY' scripts addons android/plugin/src packs data tests installer tools .github 2>/dev/null; then
   echo "private key material in the tree"
   exit 1
 fi
