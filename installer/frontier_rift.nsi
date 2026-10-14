@@ -14,7 +14,7 @@ OutFile "..\build\installer\FrontierRift-Setup.exe"
 InstallDir "$LOCALAPPDATA\Frontier Rift"
 InstallDirRegKey HKCU "Software\Frontier Rift" "InstallDir"
 
-!define PRODUCT_VERSION "0.1.0.0"
+!define PRODUCT_VERSION "0.2.0.0"
 VIProductVersion "${PRODUCT_VERSION}"
 VIFileVersion "${PRODUCT_VERSION}"
 VIAddVersionKey "ProductName" "Frontier Rift"

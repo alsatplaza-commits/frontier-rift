@@ -14,6 +14,9 @@ func _ready() -> void:
 	var settings: Dictionary = AppState.profile.get("settings", {})
 	var auto := " Grafik bu cihaza göre seçildi." if bool(settings.get("quality_auto", false)) else ""
 	box.add_child(UiKit.label("Grafik kalitesi." + auto, 18))
+	var quality_note := UiKit.label("Gölge, görüş ve bitki yoğunluğu. Bitkiler dünya açılınca uygulanır.", 16)
+	quality_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(quality_note)
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_theme_constant_override("separation", 10)

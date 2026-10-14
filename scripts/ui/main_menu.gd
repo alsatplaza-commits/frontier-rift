@@ -14,24 +14,29 @@ func _ready() -> void:
 	var sub := UiKit.label("Rift Engine", 18)
 	sub.add_theme_color_override("font_color", Color("A8B0BD"))
 	box.add_child(sub)
-	box.add_child(UiKit.label("Bölge: yaklaşık 2 km", 16))
-	var play := UiKit.button("Oyna")
-	play.pressed.connect(func() -> void:
-		_start(AppState.next_level_id())
-	)
-	box.add_child(play)
-	var levels := UiKit.button("Seviyeler")
+	box.add_child(UiKit.label("Üçüncü şahıs açık arazi", 16))
+	if _has_resume():
+		var cont := UiKit.button("Devam et")
+		cont.pressed.connect(func() -> void:
+			get_tree().change_scene_to_file("res://scenes/roam.tscn")
+		)
+		box.add_child(cont)
+		var fresh := UiKit.button("Yeni gezinti")
+		fresh.pressed.connect(func() -> void:
+			_begin(11011, "İlk Kamp")
+		)
+		box.add_child(fresh)
+	else:
+		var play := UiKit.button("Oyna")
+		play.pressed.connect(func() -> void:
+			_begin(11011, "İlk Kamp")
+		)
+		box.add_child(play)
+	var levels := UiKit.button("Bölgeler")
 	levels.pressed.connect(func() -> void:
 		get_tree().change_scene_to_file("res://scenes/level_select.tscn")
 	)
 	box.add_child(levels)
-	var saved = AppState.profile.get("match")
-	if typeof(saved) == TYPE_DICTIONARY and saved.get("sim") != null:
-		var cont := UiKit.button("Devam et")
-		cont.pressed.connect(func() -> void:
-			get_tree().change_scene_to_file("res://scenes/match.tscn")
-		)
-		box.add_child(cont)
 	var settings := UiKit.button("Ayarlar")
 	settings.pressed.connect(func() -> void:
 		get_tree().change_scene_to_file("res://scenes/settings.tscn")
@@ -44,7 +49,12 @@ func _ready() -> void:
 	box.add_child(quit)
 
 
-func _start(level_id: int) -> void:
-	AppState.profile["match"] = {"fresh": true, "level_id": level_id, "faction": AppState.faction_id()}
+func _has_resume() -> bool:
+	var roam = AppState.profile.get("roam")
+	return typeof(roam) == TYPE_DICTIONARY and roam.has("x") and not bool(roam.get("fresh", false))
+
+
+func _begin(seed: int, region: String) -> void:
+	AppState.profile["roam"] = {"fresh": true, "seed": seed, "region": region}
 	AppState.save()
-	get_tree().change_scene_to_file("res://scenes/match.tscn")
+	get_tree().change_scene_to_file("res://scenes/roam.tscn")

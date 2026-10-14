@@ -15,14 +15,14 @@ fi
 export WINEPREFIX="${WINEPREFIX:-$HOME/.wine-rcedit}"
 export WINEDEBUG=-all
 xvfb-run -a wine "$RCEDIT" "$(realpath "$EXE")" \
-  --set-file-version "0.1.0.0" \
-  --set-product-version "0.1.0.0" \
+  --set-file-version "0.2.0.0" \
+  --set-product-version "0.2.0.0" \
   --set-version-string ProductName "Frontier Rift" \
   --set-version-string FileDescription "Frontier Rift" \
   --set-version-string CompanyName "alsatplaza-commits" \
   --set-version-string LegalCopyright "(c) 2026 Frontier Rift" \
-  --set-version-string FileVersion "0.1.0.0" \
-  --set-version-string ProductVersion "0.1.0.0" \
+  --set-version-string FileVersion "0.2.0.0" \
+  --set-version-string ProductVersion "0.2.0.0" \
   --set-version-string InternalName "FrontierRift" \
   --set-version-string OriginalFilename "FrontierRift.exe" \
   --set-version-string LegalTrademarks "Frontier Rift" \

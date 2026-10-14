@@ -36,25 +36,14 @@ var _box_ui: Control
 
 
 func _ready() -> void:
-	view = WorldView.new()
-	add_child(view)
-	var match_data = AppState.profile.get("match")
-	if typeof(match_data) == TYPE_DICTIONARY and match_data.get("sim") != null:
-		_level_id = int(match_data.get("level_id", 1))
-		var lvl := AppState.level_def(_level_id)
-		sim.restore(match_data["sim"], AppState.factions, lvl)
-		selection = match_data.get("selection", [])
-		view.bind_sim(sim)
-	else:
-		_level_id = int(match_data.get("level_id", AppState.next_level_id())) if typeof(match_data) == TYPE_DICTIONARY else AppState.next_level_id()
-		var faction := str(match_data.get("faction", AppState.faction_id())) if typeof(match_data) == TYPE_DICTIONARY else AppState.faction_id()
-		sim.setup(AppState.level_def(_level_id), AppState.factions, faction)
-		view.bind_sim(sim)
-	_build_hud()
-	_build_pause()
+	get_tree().change_scene_to_file("res://scenes/roam.tscn")
+	set_process(false)
+	set_process_unhandled_input(false)
 
 
 func _process(delta: float) -> void:
+	if view == null:
+		return
 	if not paused and not _ended:
 		_acc += delta
 		var guard := 0
