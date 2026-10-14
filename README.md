@@ -1,8 +1,8 @@
 # Frontier Rift
 
-Sprint 1 of a desktop and Android RTS on **Rift Engine**. The pinned toolchain is in [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
+Sprint 2 is a third-person open valley on **Rift Engine**. The pinned toolchain is in [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
-The match loop is offline. Windows and Android both start, save, and finish a match with no network. The only request is the optional **Test paketini indir** button in Settings, and it talks only to `raw.githubusercontent.com`. There is no telemetry and no startup online check.
+You walk, look around, and sit in an outdoor landscape with hills, a river, trees, rocks, and a day-night cycle. Scrap piles and a cabin are the survival hooks. Windows and Android both play offline. The only request is the optional **Test paketini indir** button in Settings, and it talks only to `raw.githubusercontent.com`. There is no telemetry and no startup online check. The earlier match simulation stays in the test suite and is not the world the game opens.
 
 ## Play
 
@@ -16,8 +16,8 @@ Player steps are in [OYNA.md](OYNA.md). Download the installer or APK from the G
 
 ## Offline smoke
 
-- Windows: install, disconnect the network, start from the desktop shortcut, play level 1, save, quit, relaunch, and load. Settings → **Oyunu kaldır** is the only uninstall entry.
-- Android: install the APK, turn networking off, play level 1, save and load. **Oyunu kaldır** opens Android’s own application-details screen for this package. Android’s dialog decides whether to delete the app.
+- Windows: install, disconnect the network, start from the desktop shortcut. Confirm a third-person character in a valley with hills, water, and trees, not an empty green plane. Walk with WASD, look with the mouse, press C to sit and keep looking, press E on scrap and at the cabin. Esc → Kaydet, quit, relaunch, Devam et, and confirm the same spot. Settings → **Oyunu kaldır** is the only uninstall entry.
+- Android: install the APK, turn networking off, walk with the left stick, look with the right pad, sit, save and load. **Oyunu kaldır** opens Android’s own application-details screen for this package. Android’s dialog decides whether to delete the app.
 
 ## Security locks
 

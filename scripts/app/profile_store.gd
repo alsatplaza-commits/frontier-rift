@@ -17,6 +17,7 @@ static func default_profile() -> Dictionary:
 			"volume": 0.8,
 		},
 		"match": null,
+		"roam": null,
 	}
 
 

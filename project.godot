@@ -7,7 +7,7 @@ config_version=5
 
 config/name="Frontier Rift"
 config/description="Frontier Rift — Rift Engine"
-config/version="0.1.0"
+config/version="0.2.0"
 run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.png"
@@ -40,4 +40,5 @@ renderer/rendering_method="mobile"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 rendering_device/fallback_to_opengl3=true
+environment/defaults/default_clear_color=Color(0.53, 0.67, 0.8, 1)
 2d/snap/snap_2d_transforms_to_pixel=true

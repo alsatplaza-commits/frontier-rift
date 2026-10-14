@@ -4,8 +4,9 @@ extends Control
 func _ready() -> void:
 	UiKit.fill(self, Color("12161C"))
 	var box := UiKit.column(self)
-	box.add_child(UiKit.label("Seviye seç", 40))
-	box.add_child(UiKit.label("Fraksiyon", 18))
+	box.add_child(UiKit.label("Bölge seç", 40))
+	box.add_child(UiKit.label("Serbest gezinti. Konumun kendi kayıt dosyana yazılır.", 16))
+	box.add_child(UiKit.label("Kıyafet", 18))
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_theme_constant_override("separation", 12)
@@ -20,13 +21,8 @@ func _ready() -> void:
 		row.add_child(b)
 	for level in AppState.levels:
 		var id := int(level["id"])
-		var unlocked := AppState.is_unlocked(id)
-		var title := "%d. %s" % [id, str(level["name"])]
-		if not unlocked:
-			title += "  (kilitli)"
-		var b := UiKit.button(title, 420)
-		b.disabled = not unlocked
-		b.pressed.connect(_start_level.bind(id))
+		var b := UiKit.button(str(level["name"]), 420)
+		b.pressed.connect(_start_region.bind(id))
 		box.add_child(b)
 	var back := UiKit.button("Geri")
 	back.pressed.connect(func() -> void:
@@ -41,7 +37,12 @@ func _pick_faction(id: String) -> void:
 	get_tree().change_scene_to_file("res://scenes/level_select.tscn")
 
 
-func _start_level(id: int) -> void:
-	AppState.profile["match"] = {"fresh": true, "level_id": id, "faction": AppState.faction_id()}
+func _start_region(id: int) -> void:
+	var level := AppState.level_def(id)
+	AppState.profile["roam"] = {
+		"fresh": true,
+		"seed": int(level.get("seed", 11011)),
+		"region": str(level.get("name", "Vadi")),
+	}
 	AppState.save()
-	get_tree().change_scene_to_file("res://scenes/match.tscn")
+	get_tree().change_scene_to_file("res://scenes/roam.tscn")

@@ -10,7 +10,7 @@ if [[ -f README.md ]]; then files+=(README.md); fi
 if [[ -f OYNA.md ]]; then files+=(OYNA.md); fi
 
 roots=()
-for dir in installer scenes scripts/ui scripts/match scripts/platform data locale translations; do
+for dir in installer scenes scripts/ui scripts/match scripts/world scripts/platform data locale translations; do
   if [[ -d "$dir" ]]; then
     roots+=("$dir")
   fi

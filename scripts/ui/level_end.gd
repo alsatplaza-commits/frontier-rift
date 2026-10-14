@@ -52,21 +52,13 @@ func _ready() -> void:
 	if won:
 		var next := UiKit.button("Devam")
 		next.pressed.connect(func() -> void:
-			var nxt := int(result.get("level_id", 1)) + 1
-			if nxt <= 3 and AppState.is_unlocked(nxt):
-				AppState.profile["match"] = {"fresh": true, "level_id": nxt, "faction": AppState.faction_id()}
-				AppState.save()
-				get_tree().change_scene_to_file("res://scenes/match.tscn")
-			else:
-				get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+			get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 		)
 		box.add_child(next)
 	else:
 		var retry := UiKit.button("Tekrar dene")
 		retry.pressed.connect(func() -> void:
-			AppState.profile["match"] = {"fresh": true, "level_id": int(result.get("level_id", 1)), "faction": AppState.faction_id()}
-			AppState.save()
-			get_tree().change_scene_to_file("res://scenes/match.tscn")
+			get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 		)
 		box.add_child(retry)
 	var menu := UiKit.button("Ana menü")

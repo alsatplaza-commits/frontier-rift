@@ -12,8 +12,8 @@ REQUIRED = {
     "FileDescription": "Frontier Rift",
     "CompanyName": "alsatplaza-commits",
     "LegalCopyright": "(c) 2026 Frontier Rift",
-    "FileVersion": "0.1.0.0",
-    "ProductVersion": "0.1.0.0",
+    "FileVersion": "0.2.0.0",
+    "ProductVersion": "0.2.0.0",
 }
 
 
