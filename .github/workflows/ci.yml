@@ -1,0 +1,204 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+# Artifacts only. This workflow does not create tags or GitHub Releases.
+
+jobs:
+  windows:
+    name: Tests and Windows installer
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pack verifier dependency
+        run: pip install cryptography
+
+      - name: Security grep
+        run: bash tools/security_grep.sh
+
+      - name: Check export presets
+        run: |
+          python3 tools/check_android_preset.py
+          python3 - << 'PY'
+          text = open("export_presets.cfg", encoding="utf-8").read()
+          if "debug/export_console_wrapper=0" not in text:
+              raise SystemExit("console wrapper must be disabled")
+          if "binary_format/embed_pck=true" not in text:
+              raise SystemExit("pck must be embedded")
+          if 'custom_features="windows_desktop"' not in text:
+              raise SystemExit("windows feature tag missing")
+          print("desktop preset flags ok")
+          PY
+
+      - name: Verify committed test pack
+        run: python3 tools/sign_pack.py
+
+      - name: Cache Godot
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ runner.temp }}/godot-install
+            ~/.local/share/godot/export_templates/4.7.2.stable
+          key: godot-4.7.2-stable-linux
+
+      - name: Install installer tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y nsis wine64 xvfb
+          curl -fsSL -o "$RUNNER_TEMP/rcedit-x64.exe" https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe
+          echo "RCEDIT=$RUNNER_TEMP/rcedit-x64.exe" >> "$GITHUB_ENV"
+
+      - name: Install Godot 4.7.2
+        run: bash tools/install_godot.sh
+
+      - name: Import project
+        run: |
+          "$HOME/godot/Godot_v4.7.2-stable_linux.x86_64" --headless --editor --quit --path .
+
+      - name: Headless tests
+        run: |
+          "$HOME/godot/Godot_v4.7.2-stable_linux.x86_64" --headless --path . --script res://tests/test_runner.gd
+
+      - name: Export Windows
+        run: |
+          set -euo pipefail
+          mkdir -p build/windows
+          "$HOME/godot/Godot_v4.7.2-stable_linux.x86_64" --headless --path . --export-release "Windows Desktop" build/windows/FrontierRift.exe
+          test -f build/windows/FrontierRift.exe
+          if compgen -G "build/windows/*.console.exe" > /dev/null; then
+            echo "console wrapper was exported"
+            exit 1
+          fi
+          if compgen -G "build/windows/*.pck" > /dev/null; then
+            echo "loose pck was exported"
+            exit 1
+          fi
+
+      - name: Apply Windows version resources
+        run: bash tools/apply_windows_version.sh build/windows/FrontierRift.exe
+
+      - name: Build per-user installer
+        run: bash tools/build_installer.sh
+
+      - name: Check version resources
+        run: |
+          python3 -m pip install pefile
+          python3 tools/check_version_info.py build/windows/FrontierRift.exe build/installer/FrontierRift-Setup.exe
+
+      - name: Export Linux
+        run: |
+          set -euo pipefail
+          mkdir -p build/linux
+          "$HOME/godot/Godot_v4.7.2-stable_linux.x86_64" --headless --path . --export-release "Linux" build/linux/FrontierRift.x86_64
+          test -f build/linux/FrontierRift.x86_64
+          if compgen -G "build/linux/*.pck" > /dev/null; then
+            echo "loose pck was exported"
+            exit 1
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FrontierRift-Windows-Setup
+          path: build/installer/FrontierRift-Setup.exe
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FrontierRift-Linux
+          path: build/linux/FrontierRift.x86_64
+          if-no-files-found: error
+
+  android:
+    name: Android debug APK
+    needs: windows
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          # The legacy "tools" package is no longer published.
+          packages: platform-tools
+          log-accepted-android-sdk-licenses: false
+
+      - name: Install Android SDK packages
+        run: |
+          set -euo pipefail
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager --install "platforms;android-35" "platforms;android-36" "build-tools;35.0.0" "build-tools;36.0.0" "platform-tools"
+
+      - name: Build uninstall plugin
+        run: |
+          set -euo pipefail
+          echo "sdk.dir=${ANDROID_SDK_ROOT:-$ANDROID_HOME}" > android/plugin/local.properties
+          chmod +x android/plugin/gradlew
+          (cd android/plugin && ./gradlew assemble --no-daemon)
+          mkdir -p addons/rift_uninstall/bin/debug addons/rift_uninstall/bin/release
+          cp android/plugin/build/outputs/aar/riftuninstall-debug.aar addons/rift_uninstall/bin/debug/
+          cp android/plugin/build/outputs/aar/riftuninstall-release.aar addons/rift_uninstall/bin/release/
+
+      - name: Cache Godot
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ runner.temp }}/godot-install
+            ~/.local/share/godot/export_templates/4.7.2.stable
+          key: godot-4.7.2-stable-linux
+
+      - name: Install Godot 4.7.2
+        run: bash tools/install_godot.sh
+
+      - name: Install the Android build template
+        run: bash tools/install_android_template.sh
+
+      - name: Point Godot at the CI keystore and SDK
+        run: |
+          set -euo pipefail
+          KEYSTORE="$RUNNER_TEMP/frontier-rift-debug.keystore"
+          keytool -genkeypair -v \
+            -keystore "$KEYSTORE" \
+            -storepass android -keypass android \
+            -alias androiddebugkey \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -dname "CN=Frontier Rift Debug, OU=CI, O=Frontier Rift, L=None, ST=None, C=US"
+          bash tools/write_android_editor_settings.sh "$KEYSTORE"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_PATH=$KEYSTORE" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_USER=androiddebugkey" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD=android" >> "$GITHUB_ENV"
+
+      - name: Import project
+        run: |
+          "$HOME/godot/Godot_v4.7.2-stable_linux.x86_64" --headless --editor --quit --path .
+
+      - name: Export debug APK
+        run: |
+          set -euo pipefail
+          mkdir -p build/android
+          "$HOME/godot/Godot_v4.7.2-stable_linux.x86_64" --headless --path . --export-debug "Android" build/android/FrontierRift.apk
+          test -f build/android/FrontierRift.apk
+
+      - name: Check APK permissions and Windows code exclusion
+        run: bash tools/check_apk.sh build/android/FrontierRift.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FrontierRift-Android-Debug
+          path: build/android/FrontierRift.apk
+          if-no-files-found: error
